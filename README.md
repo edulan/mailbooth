@@ -1,2 +1,2 @@
-# mailbooth
-Simple email SaaS for easy testing
+# MailBooth :mailbox:
+Simple email service for easy testing
