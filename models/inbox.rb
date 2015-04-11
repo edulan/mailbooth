@@ -1,16 +1,16 @@
 require 'ohm'
-require './models/mail'
+require './models/message'
 
 module Mailbooth
   module Models
     class Inbox < Ohm::Model
       attribute :name
-      list :mails, 'Mailbooth::Models::Mail'
+      list :messages, 'Mailbooth::Models::Message'
 
       index :name
 
-      def add_mail(mail)
-        mails.push(mail.save)
+      def add_message(message)
+        messages.push(message.save)
       end
     end
   end

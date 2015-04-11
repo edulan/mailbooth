@@ -1,6 +1,6 @@
 module Mailbooth
   module Models
-    class MailAddress
+    class MessageAddress
       def initialize(data)
         @data = data
       end
