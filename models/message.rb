@@ -21,6 +21,8 @@ module Mailbooth
       attribute :type
       attribute :received_at
 
+      index :from
+
       def add_recipient(recipient)
         self.recipients ||= ''
         self.recipients << RCPT_SEPARATOR unless recipients.empty?
