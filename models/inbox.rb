@@ -6,12 +6,12 @@ module Mailbooth
   module Models
     class Inbox < Ohm::Model
       attribute :name
-      list :messages, 'Mailbooth::Models::Message'
+      set :messages, 'Mailbooth::Models::Message'
 
       index :name
 
       def add_message(message)
-        messages.push(message.save)
+        messages << message.save
       end
     end
   end
