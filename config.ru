@@ -1,3 +1,3 @@
-require './app'
+require './api'
 
-run Mailbooth::App
+run Mailbooth::API

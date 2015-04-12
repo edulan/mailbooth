@@ -2,8 +2,7 @@ source 'https://rubygems.org'
 
 gem 'eventmachine'
 gem 'ohm'
-gem 'sinatra'
-gem 'sinatra-contrib'
+gem 'grape'
 
 group :development do
   gem 'pry'

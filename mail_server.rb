@@ -1,5 +1,5 @@
-require 'ostruct'
 require 'eventmachine'
+
 require './models/inbox'
 require './models/message'
 require './models/message_data'

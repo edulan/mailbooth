@@ -24,3 +24,14 @@ namespace :mailbooth do
     end
   end
 end
+
+namespace :grape do
+  desc 'Print compiled grape routes'
+  task :routes do
+    require './api'
+
+    Mailbooth::API.routes.each do |route|
+      puts route
+    end
+  end
+end

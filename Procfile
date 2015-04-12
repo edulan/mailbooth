@@ -1,2 +1,2 @@
-web: rackup -p $PORT
+api: rackup -p $PORT
 smtp: ./bin/smtpserver
