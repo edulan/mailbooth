@@ -22,6 +22,7 @@ module Mailbooth
       attribute :received_at
 
       index :from
+      index :to
 
       def add_recipient(recipient)
         self.recipients ||= ''
