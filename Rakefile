@@ -12,8 +12,7 @@ namespace :mailbooth do
 
   desc 'Show inboxes'
   task :show do
-    require './models/inbox'
-    require './models/message'
+    require './models'
 
     Mailbooth::Models::Inbox.all.each do |i|
       puts "INBOX for #{i.name}"
