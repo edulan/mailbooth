@@ -18,12 +18,20 @@ module Mailbooth
 
       route_param :id do
         desc 'Returns all messages for an inbox.'
+        params do
+          optional :from, type: String
+        end
         get 'messages' do
           inbox = Models::Inbox[params['id']]
-
           error!('Inbox not found', 404) unless inbox
 
-          present inbox.messages.to_a, with: Entities::Message
+          if params[:from]
+            messages = inbox.messages.find(from: params[:from])
+          else
+            messages = inbox.messages
+          end
+
+          present messages.to_a, with: Entities::Message
         end
       end
     end
