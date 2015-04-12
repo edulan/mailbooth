@@ -23,8 +23,6 @@ module Mailbooth
     end
 
     def receive_message
-      # TODO: Add subject, content_type, size and so on
-      current_message.received_at = Time.now
       current_inbox.add_message(current_message)
       reset_message!
       true
