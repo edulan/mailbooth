@@ -20,13 +20,18 @@ module Mailbooth
         desc 'Returns all messages for an inbox.'
         params do
           optional :from, type: String
+          optional :to, type: String
         end
         get 'messages' do
           inbox = Models::Inbox[params['id']]
           error!('Inbox not found', 404) unless inbox
 
-          if params[:from]
-            messages = inbox.messages.find(from: params[:from])
+          search = {}
+          search[:from] = params[:from] if params[:from]
+          search[:to] = params[:to] if params[:to]
+
+          if !search.empty?
+            messages = inbox.messages.find(search)
           else
             messages = inbox.messages
           end
