@@ -1,9 +1,7 @@
 require 'grape'
 
-require './models/inbox'
-require './models/message'
-require './serializers/inbox_collection'
-require './serializers/message_collection'
+require './models'
+require './entities'
 
 module Mailbooth
   class API < Grape::API
@@ -15,7 +13,7 @@ module Mailbooth
       get do
         inboxes = Models::Inbox.all
 
-        Serializers::InboxCollection.new(inboxes).serialize
+        present inboxes.to_a, with: Entities::Inbox
       end
 
       route_param :id do
@@ -25,7 +23,7 @@ module Mailbooth
 
           error!('Inbox not found', 404) unless inbox
 
-          Serializers::MessageCollection.new(inbox.messages).serialize
+          present inbox.messages.to_a, with: Entities::Message
         end
       end
     end

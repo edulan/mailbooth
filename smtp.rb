@@ -1,12 +1,9 @@
 require 'eventmachine'
 
-require './models/inbox'
-require './models/message'
-require './models/message_data'
-require './models/message_address'
+require './models'
 
 module Mailbooth
-  class MailServer < EM::P::SmtpServer
+  class Smtp < EM::P::SmtpServer
     def get_server_domain
       'smtp.mailbooth.local'
     end

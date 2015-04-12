@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
-require './mail_server'
+require './smtp'
 
 EM.run do
   # Hit Control + C to stop
   Signal.trap('INT')  { EM.stop }
   Signal.trap('TERM') { EM.stop }
 
-  Mailbooth::MailServer.parms = { verbose: true }
-  Mailbooth::MailServer.start
+  Mailbooth::Smtp.parms = { verbose: true }
+  Mailbooth::Smtp.start
 end

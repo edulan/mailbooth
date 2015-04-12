@@ -1,4 +1,5 @@
 require 'ohm'
+
 require './models/message'
 
 module Mailbooth
