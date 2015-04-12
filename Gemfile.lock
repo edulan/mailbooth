@@ -37,7 +37,10 @@ GEM
     i18n (0.7.0)
     ice_nine (0.11.1)
     json (1.8.2)
+    mail (2.6.3)
+      mime-types (>= 1.16, < 3)
     method_source (0.8.2)
+    mime-types (2.4.3)
     minitest (5.5.1)
     msgpack (0.5.11)
     multi_json (1.11.0)
@@ -48,6 +51,8 @@ GEM
       nido
       redic
       stal
+    ohm-contrib (2.2.0)
+      ohm (~> 2.2)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -78,5 +83,7 @@ DEPENDENCIES
   eventmachine
   grape
   grape-entity
+  mail
   ohm
+  ohm-contrib
   pry

@@ -13,27 +13,25 @@ module Mailbooth
     end
 
     def receive_sender(sender)
-      current_message.sender = Models::MessageAddress.new(sender).to_s
+      current_message.sender = sender
       true
     end
 
     def receive_recipient(recipient)
-      current_message.recipient = Models::MessageAddress.new(recipient).to_s
+      current_message.add_recipient(recipient)
       true
     end
 
     def receive_message
+      # TODO: Add subject, content_type, size and so on
       current_message.received_at = Time.now
       current_inbox.add_message(current_message)
       reset_message!
       true
     end
 
-    def receive_data_chunk(data)
-      message_data = Models::MessageData.new(data)
-
-      current_message.subject = message_data.subject
-      current_message.source = message_data.source
+    def receive_data_chunk(data_chunk)
+      current_message.add_data_chunk(data_chunk)
       true
     end
 
