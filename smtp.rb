@@ -23,8 +23,10 @@ module Mailbooth
     end
 
     def receive_message
-      current_inbox.add_message(current_message)
-      reset_message!
+      EM.defer do
+        current_inbox.add_message(current_message)
+        reset_message!
+      end
       true
     end
 
@@ -47,7 +49,7 @@ module Mailbooth
     end
 
     class << self
-      def start(host = 'localhost', port = 1025)
+      def start(host = 'localhost', port = 4000)
         @redis = Ohm.redis = Redic.new('redis://127.0.0.1:6379')
         @server = EM.start_server(host, port, self)
       end
