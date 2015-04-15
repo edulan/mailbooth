@@ -1,4 +1,4 @@
-ruby '2.2.0'
+ruby '2.2.1'
 source 'https://rubygems.org'
 
 gem 'eventmachine'
@@ -10,4 +10,5 @@ gem 'grape-entity'
 
 group :development do
   gem 'pry'
+  gem 'parallel'
 end

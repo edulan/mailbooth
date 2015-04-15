@@ -53,6 +53,7 @@ GEM
       stal
     ohm-contrib (2.2.0)
       ohm (~> 2.2)
+    parallel (1.4.1)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -86,4 +87,5 @@ DEPENDENCIES
   mail
   ohm
   ohm-contrib
+  parallel
   pry
