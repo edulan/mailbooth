@@ -1,11 +1,25 @@
 #!/usr/bin/env ruby
 require './smtp'
 
-EM.run do
-  # Hit Control + C to stop
-  Signal.trap('INT')  { EM.stop }
-  Signal.trap('TERM') { EM.stop }
+@pid_file = File.expand_path('../../tmp/server.pid', __FILE__)
 
-  Mailbooth::Smtp.parms = { verbose: true }
-  Mailbooth::Smtp.start
+EM.run do
+  File.open(@pid_file, 'w') { |file| file << Process.pid }
+
+  # Hit Control + C to stop
+  Signal.trap('INT')  do
+    puts "Shutting down SMTP server... (PID #{Process.pid})"
+    File.delete(@pid_file)
+    Mailbooth::Smtp.stop
+    EM.stop
+  end
+  Signal.trap('TERM') do
+    puts "Shutting down SMTP server... (PID #{Process.pid})"
+    File.delete(@pid_file)
+    Mailbooth::Smtp.stop
+    EM.stop
+  end
+
+  puts "Booting up SMTP server... (PID #{Process.pid})"
+  Mailbooth::Smtp.start(ENV['SMTP_HOST'], ENV['SMTP_PORT'])
 end

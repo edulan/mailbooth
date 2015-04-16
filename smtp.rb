@@ -1,5 +1,6 @@
 require 'eventmachine'
 
+require './config/redis'
 require './models'
 
 module Mailbooth
@@ -49,8 +50,7 @@ module Mailbooth
     end
 
     class << self
-      def start(host = 'localhost', port = 4000)
-        @redis = Ohm.redis = Redic.new('redis://127.0.0.1:6379')
+      def start(host = 'localhost', port = 1025)
         @server = EM.start_server(host, port, self)
       end
 
