@@ -1,4 +1,7 @@
 *.sublime-project
 *.sublime-workspace
+
 /tmp/server.pid
 /examples
+
+.env
