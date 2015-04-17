@@ -15,7 +15,7 @@ namespace :mailbooth do
     require './models'
 
     Mailbooth::Models::Inbox.all.each do |i|
-      puts ">> INBOX for #{i.name}"
+      puts ">> INBOX ##{i.id} for #{i.name}"
 
       i.messages.each do |m|
         puts ">>> MAIL\n#{m.data}"
