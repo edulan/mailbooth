@@ -1,2 +1,2 @@
 api: bundle exec rackup -p $PORT
-smtp: bundle exec ./bin/smtpserver
+smtp: bundle exec ruby ./bin/smtpserver
