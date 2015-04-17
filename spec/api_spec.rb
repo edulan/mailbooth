@@ -3,7 +3,7 @@ require 'spec_helper'
 require 'rack/test'
 require './api'
 
-describe Mailbooth::API do
+RSpec.describe Mailbooth::API do
   include Rack::Test::Methods
 
   def app
