@@ -1,5 +1,6 @@
 require 'grape'
 
+require './config/redis'
 require './models'
 require './entities'
 
@@ -10,8 +11,18 @@ module Mailbooth
 
     resource :inboxes do
       desc 'Return all inboxes.'
+      params do
+        optional :auth, type: String
+      end
       get do
-        inboxes = Models::Inbox.all
+        search = {}
+        search[:auth] = params[:auth] if params[:auth]
+
+        if !search.empty?
+          inboxes = Models::Inbox.find(search)
+        else
+          inboxes = Models::Inbox.all
+        end
 
         present inboxes.to_a, with: Entities::Inbox
       end
