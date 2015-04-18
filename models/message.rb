@@ -7,9 +7,7 @@ module Mailbooth
     class Message < Ohm::Model
       include Ohm::Callbacks
 
-      RCPT_SEPARATOR = ', '
-      CRLF = "\r\n"
-      MIME_TEXT = 'text/plain'
+      DEFAULT_MIME_TYPE = 'text/plain'
 
       attribute :sender
       attribute :recipients
@@ -25,17 +23,6 @@ module Mailbooth
       index :from
       index :to
 
-      def add_recipient(recipient)
-        self.recipients ||= ''
-        self.recipients << RCPT_SEPARATOR unless recipients.empty?
-        self.recipients << recipient.to_s
-      end
-
-      def add_data_chunk(data_chunk)
-        self.data ||= ''
-        self.data << data_chunk.join(CRLF) << CRLF
-      end
-
       private
 
       def before_save
@@ -45,7 +32,7 @@ module Mailbooth
         self.to = mail.to.join(',')
         self.subject = mail.subject
         self.body = mail.body.to_s
-        self.type = mail.mime_type || MIME_TEXT
+        self.type = mail.mime_type || DEFAULT_MIME_TYPE
         self.received_at = Time.now
       end
     end

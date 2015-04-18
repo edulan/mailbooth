@@ -1,9 +1,34 @@
-require 'eventmachine'
-
-require './config/redis'
-require './models'
+require 'json'
+require 'em-synchrony'
+require 'em-synchrony/em-http'
 
 module Mailbooth
+  class IncomingMessage
+    RCPT_SEPARATOR = ', '
+    CRLF = "\r\n"
+
+    attr_accessor :sender, :recipients, :data
+
+    def add_recipient(recipient)
+      self.recipients ||= ''
+      self.recipients << RCPT_SEPARATOR unless recipients.empty?
+      self.recipients << recipient.to_s
+    end
+
+    def add_data_chunk(data_chunk)
+      self.data ||= ''
+      self.data << data_chunk.join(CRLF) << CRLF
+    end
+
+    def to_json
+      JSON.generate(
+        sender: sender,
+        recipients: recipients,
+        data: data
+      )
+    end
+  end
+
   class Smtp < EM::P::SmtpServer
     def get_server_domain
       'smtp.mailbooth.local'
@@ -24,8 +49,14 @@ module Mailbooth
     end
 
     def receive_message
-      EM.defer do
-        current_inbox.add_message(current_message)
+      EM.synchrony do
+        EM::HttpRequest.new('http://127.0.0.1:9292/api/inboxes/1/messages').post(
+          body: current_message.to_json,
+          head: {
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+          }
+        )
         reset_message!
       end
       true
@@ -37,16 +68,11 @@ module Mailbooth
     end
 
     def current_message
-      @current_message ||= Models::Message.new
+      @current_message ||= IncomingMessage.new
     end
 
     def reset_message!
       @current_message = nil
-    end
-
-    def current_inbox
-      Models::Inbox.find(name: current_message.sender).first ||
-        Models::Inbox.create(name: current_message.sender)
     end
 
     class << self
