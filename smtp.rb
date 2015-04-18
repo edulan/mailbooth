@@ -20,6 +20,18 @@ module Mailbooth
       self.data << data_chunk.join(CRLF) << CRLF
     end
 
+    def save
+      EM::HttpRequest.new('http://127.0.0.1:9292/api/inboxes/1/messages').post(
+        body: to_json,
+        head: {
+          'Accept' => 'application/json',
+          'Content-Type' => 'application/json'
+        }
+      )
+    end
+
+    private
+
     def to_json
       JSON.generate(
         sender: sender,
@@ -50,13 +62,7 @@ module Mailbooth
 
     def receive_message
       EM.synchrony do
-        EM::HttpRequest.new('http://127.0.0.1:9292/api/inboxes/1/messages').post(
-          body: current_message.to_json,
-          head: {
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-          }
-        )
+        current_message.save
         reset_message!
       end
       true
