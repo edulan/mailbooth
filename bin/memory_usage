@@ -6,8 +6,8 @@ PID_FILE = File.expand_path('../../tmp/server.pid', __FILE__)
 
 Mail.defaults do
   delivery_method :smtp,
-                  address: '127.0.0.1',
-                  port: 1025
+                  address: ENV['SMTP_HOST'],
+                  port: ENV['SMTP_PORT']
 end
 
 def start_server
