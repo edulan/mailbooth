@@ -12,6 +12,7 @@ module Mailbooth
 
       def add_message(message)
         messages << message.save
+        message
       end
     end
   end

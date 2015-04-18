@@ -38,6 +38,21 @@ module Mailbooth
 
           present messages.to_a, with: Entities::Message
         end
+
+        desc 'Create a message for an inbox'
+        params do
+          requires :sender, type: String
+          requires :recipients, type: String
+          requires :data, type: String
+        end
+        post 'messages' do
+          inbox = Models::Inbox[params['id']]
+          error!('Inbox not found', 404) unless inbox
+
+          message = inbox.add_message(Models::Message.new(params))
+
+          present message, with: Entities::Message
+        end
       end
     end
   end

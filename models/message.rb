@@ -9,6 +9,7 @@ module Mailbooth
 
       RCPT_SEPARATOR = ', '
       CRLF = "\r\n"
+      MIME_TEXT = 'text/plain'
 
       attribute :sender
       attribute :recipients
@@ -44,8 +45,8 @@ module Mailbooth
         self.to = mail.to.join(',')
         self.subject = mail.subject
         self.body = mail.body.to_s
-        self.type = mail.mime_type
-        self.received_at = mail.date.to_time
+        self.type = mail.mime_type || MIME_TEXT
+        self.received_at = Time.now
       end
     end
   end
