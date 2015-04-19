@@ -15,7 +15,10 @@ API_BASE_PATH = '/api'
 Mail.defaults do
   delivery_method :smtp,
                   address: SMTP_HOST,
-                  port: SMTP_PORT
+                  port: SMTP_PORT,
+                  authentication: 'plain',
+                  user_name: 'foo',
+                  password: '123'
 end
 
 RSpec.describe 'Mailbooth' do
@@ -47,6 +50,7 @@ RSpec.describe 'Mailbooth' do
         TCPSocket.new(SMTP_HOST, SMTP_PORT).close
         TCPSocket.new(API_HOST, API_PORT).close
       rescue Errno::ECONNREFUSED
+        sleep 0.3
         retry
       end
     end
