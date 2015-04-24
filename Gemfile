@@ -15,6 +15,8 @@ gem 'puma', '2.10.2'
 group :development do
   gem 'pry', '0.10.1'
   gem 'parallel', '1.4.1'
+  gem 'prmd'
+  gem 'heroics'
 end
 
 group :test do
