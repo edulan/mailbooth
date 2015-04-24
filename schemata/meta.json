@@ -1,0 +1,9 @@
+{
+ "description": "Mailbooth API",
+ "id": "mailbooth-api",
+ "links": [{
+   "href": "http://mailbooth.herokuapp.com/api",
+   "rel": "self"
+ }],
+ "title": "Mailbooth API"
+}
