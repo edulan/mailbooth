@@ -1,0 +1,144 @@
+{
+  "$schema": "http://json-schema.org/draft-04/hyper-schema",
+  "definitions": {
+    "inbox": {
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
+      "title": "FIXME - Inbox",
+      "definitions": {
+        "id": {
+          "description": "unique identifier of inbox",
+          "example": 1,
+          "type": [
+            "integer"
+          ]
+        },
+        "identity": {
+          "$ref": "#/definitions/inbox/definitions/id"
+        },
+        "name": {
+          "description": "name of the inbox",
+          "example": "My inbox",
+          "type": [
+            "string"
+          ]
+        },
+        "username": {
+          "description": "smtp username for the inbox",
+          "example": "fc97223af6917411b7c6b914eff104b024",
+          "type": [
+            "string"
+          ]
+        },
+        "password": {
+          "description": "smtp password for the inbox",
+          "example": "c12b3fccb5c7a195311eb5486469",
+          "type": [
+            "string"
+          ]
+        },
+        "created_at": {
+          "description": "when inbox was created",
+          "example": "2012-01-01T12:00:00Z",
+          "format": "date-time",
+          "type": [
+            "string"
+          ]
+        },
+        "updated_at": {
+          "description": "when inbox was updated",
+          "example": "2012-01-01T12:00:00Z",
+          "format": "date-time",
+          "type": [
+            "string"
+          ]
+        }
+      },
+      "description": "FIXME",
+      "links": [
+        {
+          "description": "Create a new inbox.",
+          "href": "/inboxes",
+          "method": "POST",
+          "rel": "create",
+          "schema": {
+            "properties": {
+              "name": {
+                "type": [
+                  "string"
+                ]
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "type": [
+              "object"
+            ]
+          },
+          "title": "Create"
+        },
+        {
+          "description": "Delete an existing inbox.",
+          "href": "/inboxes/{(%23%2Fdefinitions%2Finbox%2Fdefinitions%2Fidentity)}",
+          "method": "DELETE",
+          "rel": "destroy",
+          "title": "Delete"
+        },
+        {
+          "description": "Info for existing inbox.",
+          "href": "/inboxes/{(%23%2Fdefinitions%2Finbox%2Fdefinitions%2Fidentity)}",
+          "method": "GET",
+          "rel": "self",
+          "title": "Info"
+        },
+        {
+          "description": "List existing inboxes.",
+          "href": "/inboxes",
+          "method": "GET",
+          "rel": "instances",
+          "title": "List"
+        }
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/inbox/definitions/id"
+        },
+        "name": {
+          "$ref": "#/definitions/inbox/definitions/name"
+        },
+        "username": {
+          "$ref": "#/definitions/inbox/definitions/username"
+        },
+        "password": {
+          "$ref": "#/definitions/inbox/definitions/password"
+        },
+        "created_at": {
+          "$ref": "#/definitions/inbox/definitions/created_at"
+        },
+        "updated_at": {
+          "$ref": "#/definitions/inbox/definitions/updated_at"
+        }
+      },
+      "type": [
+        "object"
+      ]
+    }
+  },
+  "properties": {
+    "inbox": {
+      "$ref": "#/definitions/inbox"
+    }
+  },
+  "type": [
+    "object"
+  ],
+  "description": "Mailbooth API",
+  "id": "mailbooth-api",
+  "links": [
+    {
+      "href": "http://mailbooth.herokuapp.com/api",
+      "rel": "self"
+    }
+  ],
+  "title": "Mailbooth API"
+}
