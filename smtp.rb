@@ -127,8 +127,7 @@ module Mailbooth
     end
 
     def receive_plain_auth(user, pass)
-      @authenticator = InboxAuthenticator.new
-      @authenticator.authenticate(username: user, password: pass)
+      authenticator.authenticate(username: user, password: pass)
     end
 
     def receive_sender(sender)
@@ -156,8 +155,8 @@ module Mailbooth
       true
     end
 
-    def current_inbox
-      @current_inbox
+    def authenticator
+      @authenticator ||= InboxAuthenticator.new
     end
 
     def current_message
@@ -165,7 +164,7 @@ module Mailbooth
     end
 
     def reset!
-      @current_inbox = nil
+      @authenticator = nil
       @current_message = nil
     end
 

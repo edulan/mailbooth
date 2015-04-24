@@ -12,19 +12,11 @@ API_PORT = 9292
 API_CONFIG_PATH = File.expand_path('../../config.ru', __FILE__)
 API_BASE_PATH = '/api'
 
-Mail.defaults do
-  delivery_method :smtp,
-                  address: SMTP_HOST,
-                  port: SMTP_PORT,
-                  authentication: 'plain',
-                  user_name: 'foo',
-                  password: '123'
-end
-
 RSpec.describe 'Mailbooth' do
   context 'sending an email' do
     before(:context) do
       spawn_servers
+      create_inbox
     end
 
     after(:context) do
@@ -59,6 +51,33 @@ RSpec.describe 'Mailbooth' do
       Process.kill('TERM', @smtp_pid)
       Process.kill('TERM', @api_pid)
       Process.wait
+    end
+
+    def create_inbox
+      uri = URI::HTTP.build(
+        host: API_HOST,
+        port: API_PORT,
+        path: "#{API_BASE_PATH}/inboxes")
+      headers = {
+        'Content-Type' => 'application/json',
+        'Accept' => 'application/json'
+      }
+
+      http = Net::HTTP.new(uri.host, uri.port)
+      request = Net::HTTP::Post.new(uri.request_uri, headers)
+      request.body = { name: 'Test inbox' }.to_json
+
+      response = http.request(request)
+      result = JSON.load(response.body)
+
+      Mail.defaults do
+        delivery_method :smtp,
+                        address: SMTP_HOST,
+                        port: SMTP_PORT,
+                        authentication: 'plain',
+                        user_name: result['username'],
+                        password: result['password']
+      end
     end
 
     def compose_mail(name, options = {})
