@@ -11,14 +11,17 @@ RSpec.describe Mailbooth::API do
   end
 
   describe 'GET /api/inboxes' do
-    let(:inbox) { double('Inbox', id: '1', name: 'Inbox 1') }
-    let(:inbox2) { double('Inbox', id: '2', name: 'Inbox 2') }
+    let(:inboxes) do
+      (1..3).map do |i|
+        double('Inbox', id: "#{i}", name: "Inbox #{i}")
+      end
+    end
 
     context 'searching for all' do
       let(:params) { {} }
 
       before do
-        allow(Mailbooth::Models::Inbox).to receive(:all).and_return([inbox, inbox2])
+        allow(Mailbooth::Models::Inbox).to receive(:all).and_return(inboxes)
         get '/api/inboxes', params
       end
 
@@ -31,18 +34,22 @@ RSpec.describe Mailbooth::API do
       context 'response length' do
         subject { JSON.parse(last_response.body).length }
 
-        it { is_expected.to eq(2) }
+        it { is_expected.to eq(inboxes.length) }
       end
 
       context 'response body' do
         subject { JSON.parse(last_response.body) }
 
-        it { expect(subject[0]['id']).to eq(inbox.id) }
-        it { expect(subject[1]['id']).to eq(inbox2.id) }
+        it do
+          inboxes.each_with_index do |inbox, index|
+            expect(subject[index]['id']).to eq(inbox.id)
+          end
+        end
       end
     end
 
     context 'searching by auth' do
+      let(:inbox) { inboxes.first }
       let(:params) { { auth: '1111111' } }
 
       before do
@@ -71,22 +78,86 @@ RSpec.describe Mailbooth::API do
     end
   end
 
-  # TODO: Refactor
+  describe 'POST /api/inboxes' do
+    let(:inbox) do
+      instance_double('Inbox',
+                      id: '1',
+                      name: params[:name],
+                      username: '123456',
+                      password: '123456'
+      )
+    end
+    let(:params) do
+      {
+        name: '<foo@bar.com>'
+      }
+    end
+
+    before do
+      allow(Mailbooth::Models::Inbox).to receive(:create).with(params).and_return(inbox)
+      post '/api/inboxes', params
+    end
+
+    context 'response status' do
+      subject { last_response.status }
+
+      it { is_expected.to be(201) }
+    end
+
+    context 'response body' do
+      subject { JSON.parse(last_response.body) }
+
+      it { expect(subject['id']).to eq(inbox.id) }
+      it { expect(subject['name']).to eq(inbox.name) }
+      it { expect(subject['username']).to eq(inbox.username) }
+      it { expect(subject['password']).to eq(inbox.password) }
+    end
+  end
+
   describe 'GET /api/inboxes/1/messages' do
-    let(:inbox) { double('Inbox', id: '1', messages: []) }
+    let(:inbox) { double('Inbox', id: '1', name: '<foo@bar.com>') }
+    let(:messages) do
+      (1..3).map do |i|
+        instance_double(
+          'Message',
+          id: "#{i}",
+          to: 'blah@blah.com',
+          from: 'me@sj26.com',
+          subject: 'Test mail',
+          body: 'Test mail.',
+          received_at: Time.now,
+          type: 'text/plain'
+        )
+      end
+    end
     let(:params) { {} }
 
     before do
       allow(Mailbooth::Models::Inbox).to receive(:[]).with(inbox.id).and_return(inbox)
+      allow(inbox).to receive(:messages).and_return(messages)
+      get '/api/inboxes/1/messages', params
     end
 
-    it 'returns all inbox messages' do
-      get "/api/inboxes/#{inbox.id}/messages", params
+    context 'response status' do
+      subject { last_response.status }
 
-      json_body = JSON.parse(last_response.body)
+      it { is_expected.to be(200) }
+    end
 
-      expect(last_response.status).to be(200)
-      expect(json_body.length).to eq(0)
+    context 'response length' do
+      subject { JSON.parse(last_response.body).length }
+
+      it { is_expected.to eq(messages.length) }
+    end
+
+    context 'response body' do
+      subject { JSON.parse(last_response.body) }
+
+      it do
+        messages.each_with_index do |message, index|
+          expect(subject[index]['id']).to eq(message.id)
+        end
+      end
     end
   end
 

@@ -27,6 +27,16 @@ module Mailbooth
         present inboxes.to_a, with: Entities::Inbox
       end
 
+      desc 'Creates an inbox.'
+      params do
+        optional :name, type: String
+      end
+      post do
+        inbox = Models::Inbox.create(params)
+
+        present inbox, with: Entities::Inbox, show_credentials: true
+      end
+
       route_param :id do
         desc 'Returns all messages for an inbox.'
         params do
