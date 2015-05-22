@@ -1,24 +1,24 @@
 namespace :mailbooth do
-  desc 'Flush all data (inboxes, messages, ect.)'
-  task :flush_all do
-    require 'redic'
+  namespace :messages do
+    desc 'Flush all messages data'
+    task :flush_all do
+      require 'redic'
 
-    redis = Redic.new
+      redis = Redic.new
 
-    redis.queue 'FLUSHDB'
-    redis.queue 'FLUSHALL'
-    redis.commit
-  end
+      redis.queue 'FLUSHDB'
+      redis.queue 'FLUSHALL'
+      redis.commit
+    end
 
-  desc 'Show inboxes'
-  task :show do
-    require './models'
+    desc 'Show all messages'
+    task :show_all do
+      require './app/models/message'
 
-    Mailbooth::Models::Inbox.all.each do |i|
-      puts ">> INBOX ##{i.id} for #{i.name}"
-
-      i.messages.each do |m|
-        puts ">>> MAIL\n#{m.data}"
+      Mailbooth::Models::Message.all.each do |m|
+        puts ">> MAIL ##{m.id}"
+        puts ">> #{m.to}"
+        puts ">> #{m.subject}"
       end
     end
   end
@@ -27,9 +27,9 @@ end
 namespace :grape do
   desc 'Print compiled grape routes'
   task :routes do
-    require './api'
+    require './app/api'
 
-    Mailbooth::API.routes.each do |route|
+    Mailbooth::App.routes.each do |route|
       puts route
     end
   end

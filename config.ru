@@ -1,3 +1,3 @@
-require File.expand_path('../api', __FILE__)
+require File.expand_path('../app/api', __FILE__)
 
-run Mailbooth::API
+run Mailbooth::App
